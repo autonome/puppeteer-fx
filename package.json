@@ -1,0 +1,14 @@
+{
+  "name": "puppeteer-fx",
+  "version": "0.0.1",
+  "description": "Completely partial implementation of the Puppeteer API for Firefox",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dietrich Ayala <autonome@gmail.com> (http://metafluff.com)",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "foxdriver": "latest"
+  }
+}
