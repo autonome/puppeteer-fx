@@ -26,6 +26,15 @@ Happy to accept PRs if you find this useful and want to add more API coverage.
   * evaluate()
 
 
+## Installation
+
+It's on NPM, so add `puppeteer-fx` to your dependencies in package.json, or:
+
+```bash
+
+npm install puppeteer-fx
+```
+
 ## Example
 
 ```
@@ -34,7 +43,7 @@ const url = 'https://mozilla.github.io/arewefastyet-speedometer/2.0/';
 const browser = await puppeteer.launch({headless: false});
 
 const page = await browser.newPage();
-await page.goto(speedometerURL);
+await page.goto(url);
 
 page.evaluate('document.querySelector(\'section#home div.buttons button\').click()');
 ```
