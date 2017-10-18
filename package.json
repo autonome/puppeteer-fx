@@ -1,14 +1,24 @@
 {
   "name": "puppeteer-fx",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Completely partial implementation of the Puppeteer API for Firefox",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dietrich Ayala <autonome@gmail.com> (http://metafluff.com)",
-  "license": "MPL-2.0",
+  "license": "MIT",
   "dependencies": {
     "foxdriver": "latest"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/autonome/puppeteer-fx.git"
+  },
+  "keywords": [
+    "automation",
+    "browser",
+    "puppeteer",
+    "firefox"
+  ]
 }
