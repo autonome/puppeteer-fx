@@ -2,10 +2,15 @@ const foxdriver = require('foxdriver');
 const defaultLaunchURL = 'about:blank';
 
 class puppeteer {
-  constructor(opts) {
+  constructor() {
   }
-	async launch() {
-    const { browser: fdBrowser, tab: fdTab } = await foxdriver.launch({url: defaultLaunchURL});
+	async launch(opts) {
+    const launchCfg = {
+      url: defaultLaunchURL,
+      bin: opts.executablePath || '',
+      args: opts.headless ? '--headless' : ''
+    };
+    const { browser: fdBrowser, tab: fdTab } = await foxdriver.launch(launchCfg);
     return new browser({fdBrowser, fdTab});
 	}
 }
@@ -36,6 +41,13 @@ class page {
   }
 }
 
+/*
+
+http://searchfox.org/mozilla-central/source/devtools/shared/client/object-client.js
+
+https://github.com/devtools-html/devtools-core/tree/master/packages/devtools-reps/src/reps
+
+*/
 function inflateGrip(grip) {
   //console.log('grip', grip);
   let inflated;
