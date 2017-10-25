@@ -18,6 +18,8 @@ Happy to accept PRs if you find this useful and want to add more API coverage.
 
 * puppeteer
   * launch()
+    * headless
+    * userDataDir
 * browser
   * newPage()
   * close()
@@ -47,4 +49,14 @@ await page.goto(url);
 
 page.evaluate('document.querySelector(\'section#home div.buttons button\').click()');
 ```
+
+## Profiles
+
+
+devtools.chrome.enabled: true
+devtools.debugger.prompt-connection: false
+devtools.debugger.remote-enabled: true
+toolkit.telemetry.reportingpolicy.firstRun: false
+
+https://github.com/saucelabs/foxdriver/blob/master/lib/config/profile/prefs.js
 

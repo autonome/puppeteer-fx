@@ -5,11 +5,21 @@ class puppeteer {
   constructor() {
   }
 	async launch(opts) {
-    const launchCfg = {
+    var launchCfg = {
       url: defaultLaunchURL,
       bin: opts.executablePath || '',
-      args: opts.headless ? '--headless' : ''
+      args: []
     };
+
+    if (opts.headless) {
+      launchCfg.args.push('--headless');
+    }
+
+    if (opts.userDataDir) {
+      launchCfg.args.push('--profile');
+      launchCfg.args.push(opts.userDataDir);
+    }
+
     const { browser: fdBrowser, tab: fdTab } = await foxdriver.launch(launchCfg);
     return new browser({fdBrowser, fdTab});
 	}
