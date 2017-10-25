@@ -27,6 +27,17 @@ Happy to accept PRs if you find this useful and want to add more API coverage.
   * goto()
   * evaluate()
 
+## Extra  APIs
+
+Network Throttling
+
+* Firefox-only
+* Add "throttling" option to launch()
+* Supported properties
+  * downloadThroughput: integer, bytes/s, defaults to 75000
+  * uploadThroughput: integer, bytes/s, defaults to 25000
+  * latency: integer, in milliseconds, defaults to 100
+
 
 ## Installation
 

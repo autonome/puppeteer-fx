@@ -21,6 +21,14 @@ class puppeteer {
     }
 
     const { browser: fdBrowser, tab: fdTab } = await foxdriver.launch(launchCfg);
+
+    if (opts.throttling) {
+      const downloadThroughput = opts.throttling.downloadThroughput || 75000
+      const uploadThroughput = opts.throttling.uploadThroughput || 25000
+      const latency = opts.throttling.latency || 100
+      await fdTab.emulation.setNetworkThrottling(downloadThroughput, uploadThroughput, latency);
+    }
+
     return new browser({fdBrowser, fdTab});
 	}
 }
