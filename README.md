@@ -14,6 +14,10 @@ I'll probably add more as I hit more functionality that I need.
 
 Happy to accept PRs if you find this useful and want to add more API coverage.
 
+[![NPM](https://nodei.co/npm/puppeteer-fx.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/puppeteer-fx/)
+
+
+
 ## Supported APIs
 
 * puppeteer
@@ -27,6 +31,8 @@ Happy to accept PRs if you find this useful and want to add more API coverage.
   * goto()
   * evaluate()
 
+
+
 ## Extra  APIs
 
 Network Throttling
@@ -39,32 +45,41 @@ Network Throttling
   * latency: integer, in milliseconds, defaults to 100
 
 
+
 ## Installation
 
 It's on NPM, so add `puppeteer-fx` to your dependencies in package.json, or:
 
-```bash
-
+```Shell
 npm install puppeteer-fx
 ```
 
+
 ## Example
 
-```
-const puppeteerFx = require('./puppeteer-fx');
-const url = 'https://mozilla.github.io/arewefastyet-speedometer/2.0/';
-const browser = await puppeteer.launch({headless: false});
+```JavaScript
+const puppeteer = require('./puppeteer-fx');
 
-const page = await browser.newPage();
-await page.goto(url);
+(async () => {
 
-page.evaluate('document.querySelector(\'section#home div.buttons button\').click()');
+    const browser = await puppeteer.launch({headless: false});
+
+    const page = await browser.newPage();
+
+    await page.goto('https://mozilla.github.io/arewefastyet-speedometer/2.0/');
+
+    await page.evaluate(
+        'document.querySelector("section#home div.buttons button").click()'
+    );
+})();
 ```
+
 
 ## Profiles
 
 user.js
 
+```JavaScript
 user_pref("devtools.chrome.enabled", true);
 user_pref("devtools.debugger.prompt-connection", false);
 user_pref("devtools.debugger.remote-enabled", true);
@@ -79,6 +94,12 @@ user_pref("toolkit.telemetry.prompted", true);
 user_pref("browser.rights.override", true);
 user_pref("browser.startup.homepage_override.mstone", "ignore");
 user_pref("browser.shell.checkDefaultBrowser", false);
+```
 
 https://github.com/saucelabs/foxdriver/blob/master/lib/config/profile/prefs.js
 
+
+
+## Similar works
+
+ - [Puppeteer-IE](https://techquery.github.io/Puppeteer-IE/)

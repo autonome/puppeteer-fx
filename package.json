@@ -2,11 +2,20 @@
   "name": "puppeteer-fx",
   "version": "0.0.4",
   "description": "Completely partial implementation of the Puppeteer API for Firefox",
-  "main": "index.js",
+  "main": "source/index.js",
   "scripts": {
+    "lint": "eslint ./source/ ./test/",
+    "precommit": "npm run lint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dietrich Ayala <autonome@gmail.com> (http://metafluff.com)",
+  "contributors": [
+    {
+      "name": "TechQuery",
+      "email": "shiy2008@gmail.com",
+      "url": "https://tech-query.me/"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "foxdriver": "latest"
@@ -20,5 +29,9 @@
     "browser",
     "puppeteer",
     "firefox"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "husky": "^0.14.3"
+  }
 }
