@@ -3,9 +3,16 @@
   "version": "0.0.4",
   "description": "Completely partial implementation of the Puppeteer API for Firefox",
   "main": "source/index.js",
+  "engines": {
+    "node": "^7.6.0"
+  },
   "scripts": {
     "lint": "eslint ./source/ ./test/",
     "precommit": "npm run lint",
+    "document": "jsdoc ./source/ -c ./build/document.json",
+    "clean": "cd ./docs/  &&  reduce-blank  &&  node ../build/beautifyDoc",
+    "build": "npm run document  &&  npm run clean",
+    "help": "html-pages docs/ -o",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dietrich Ayala <autonome@gmail.com> (http://metafluff.com)",
@@ -31,7 +38,19 @@
     "firefox"
   ],
   "devDependencies": {
+    "docdash": "^0.4.0",
     "eslint": "^4.19.1",
-    "husky": "^0.14.3"
-  }
+    "fs-extra": "^5.0.0",
+    "fs-match": "^0.2.1",
+    "html-pages": "^2.1.1",
+    "husky": "^0.14.3",
+    "js-beautify": "^1.7.5",
+    "jsdoc": "^3.5.5",
+    "jsdoc-inheritance-diagram": "^1.2.1",
+    "reduce-blank": "^0.2.0"
+  },
+  "bugs": {
+    "url": "https://github.com/autonome/puppeteer-fx/issues"
+  },
+  "homepage": "https://autonome.github.io/puppeteer-fx/"
 }
