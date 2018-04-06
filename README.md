@@ -1,18 +1,6 @@
 # Puppeteer for Firefox
 
-I needed to run some tests against both Chrome and Firefox. Because I am lazy, I only wanted to write the harness code once.
-
-So I took [Foxdriver](https://github.com/saucelabs/foxdriver), written by the wonderful folks at [Sauce Labs](https://saucelabs.com/), and wrapped the [Puppeteer API](https://github.com/GoogleChrome/puppeteer/) around it.
-
-Well, just a tiny bit of it... enough to:
-
-* Launch Firefox
-* Open a URL
-* Evaluate JS in the console of the page
-
-I'll probably add more as I hit more functionality that I need.
-
-Happy to accept PRs if you find this useful and want to add more API coverage.
+Headless Firefox NodeJS API based on [FoxDriver](https://github.com/saucelabs/foxdriver/) (written by the wonderful folks at [Sauce Labs](https://saucelabs.com/)), which is compatible with [Puppeteer API](https://github.com/GoogleChrome/puppeteer/).
 
 [![NPM](https://nodei.co/npm/puppeteer-fx.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/puppeteer-fx/)
 
@@ -20,16 +8,7 @@ Happy to accept PRs if you find this useful and want to add more API coverage.
 
 ## Supported APIs
 
-* puppeteer
-  * launch()
-    * headless
-    * userDataDir
-* browser
-  * newPage()
-  * close()
-* page
-  * goto()
-  * evaluate()
+Execute `npm run help` for details.
 
 
 

@@ -31,12 +31,24 @@
                 <ul class='methods'>
                     <li data-type='method'><a href="Browser.html#close">close</a></li>
                     <li data-type='method'><a href="Browser.html#newPage">newPage</a></li>
+                    <li data-type='method'><a href="Browser.html#userAgent">userAgent</a></li>
                 </ul>
             </li>
             <li><a href="Page.html">Page</a>
                 <ul class='methods'>
+                    <li data-type='method'><a href="Page.html#$">$</a></li>
+                    <li data-type='method'><a href="Page.html#$$">$$</a></li>
+                    <li data-type='method'><a href="Page.html#addScriptTag">addScriptTag</a></li>
+                    <li data-type='method'><a href="Page.html#addStyleTag">addStyleTag</a></li>
+                    <li data-type='method'><a href="Page.html#content">content</a></li>
                     <li data-type='method'><a href="Page.html#evaluate">evaluate</a></li>
+                    <li data-type='method'><a href="Page.html#focus">focus</a></li>
+                    <li data-type='method'><a href="Page.html#goBack">goBack</a></li>
+                    <li data-type='method'><a href="Page.html#goFoward">goFoward</a></li>
                     <li data-type='method'><a href="Page.html#goto">goto</a></li>
+                    <li data-type='method'><a href="Page.html#reload">reload</a></li>
+                    <li data-type='method'><a href="Page.html#setContent">setContent</a></li>
+                    <li data-type='method'><a href="Page.html#title">title</a></li>
                 </ul>
             </li>
             <li><a href="Puppeteer.html">Puppeteer</a>
@@ -53,42 +65,10 @@
         <section class="readme">
             <article>
                 <h1>Puppeteer for Firefox</h1>
-                <p>I needed to run some tests against both Chrome and Firefox. Because I am lazy, I only wanted to write the harness code once.</p>
-                <p>So I took <a href="https://github.com/saucelabs/foxdriver">Foxdriver</a>, written by the wonderful folks at <a href="https://saucelabs.com/">Sauce Labs</a>, and wrapped the <a href="https://github.com/GoogleChrome/puppeteer/">Puppeteer API</a>                    around it.</p>
-                <p>Well, just a tiny bit of it... enough to:</p>
-                <ul>
-                    <li>Launch Firefox</li>
-                    <li>Open a URL</li>
-                    <li>Evaluate JS in the console of the page</li>
-                </ul>
-                <p>I'll probably add more as I hit more functionality that I need.</p>
-                <p>Happy to accept PRs if you find this useful and want to add more API coverage.</p>
+                <p>Headless Firefox NodeJS API based on <a href="https://github.com/saucelabs/foxdriver/">FoxDriver</a> (written by the wonderful folks at <a href="https://saucelabs.com/">Sauce Labs</a>), which is compatible with <a href="https://github.com/GoogleChrome/puppeteer/">Puppeteer API</a>.</p>
                 <p><a href="https://nodei.co/npm/puppeteer-fx/"><img src="https://nodei.co/npm/puppeteer-fx.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
                 <h2>Supported APIs</h2>
-                <ul>
-                    <li>puppeteer
-                        <ul>
-                            <li>launch()
-                                <ul>
-                                    <li>headless</li>
-                                    <li>userDataDir</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>browser
-                        <ul>
-                            <li>newPage()</li>
-                            <li>close()</li>
-                        </ul>
-                    </li>
-                    <li>page
-                        <ul>
-                            <li>goto()</li>
-                            <li>evaluate()</li>
-                        </ul>
-                    </li>
-                </ul>
+                <p>Execute <code>npm run help</code> for details.</p>
                 <h2>Extra APIs</h2>
                 <p>Network Throttling</p>
                 <ul>

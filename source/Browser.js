@@ -13,7 +13,7 @@ class Browser extends EventEmitter {
 
     constructor({browser, tab}) {
 
-        super();
+        super()._page = [ ];
 
         this._browser = browser;
 
@@ -25,7 +25,7 @@ class Browser extends EventEmitter {
      */
     newPage() {
 
-        return  new Page({tab:  this._tab});
+        return  this._page[this._page.push(new Page({tab:  this._tab})) - 1];
     }
 
     /**
@@ -38,6 +38,14 @@ class Browser extends EventEmitter {
     close() {
 
         return  this._browser.close();
+    }
+
+    /**
+     * @return {Promise<string>} Promise which resolves to the browser's original user agent
+     */
+    userAgent() {
+
+        return  this._page[0].evaluate('navigator.userAgent');
     }
 }
 
