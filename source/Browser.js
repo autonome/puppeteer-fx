@@ -1,15 +1,12 @@
-'use strict';
+import EventEmitter from 'events';
 
-const EventEmitter = require('events'), Page = require('./Page');
+import Page from './Page';
 
 
 /**
  * A Browser is created when Puppeteer connects to a Firefox instance
- *
- * @class
- * @extends EventEmitter
  */
-class Browser extends EventEmitter {
+export default  class Browser extends EventEmitter {
 
     constructor({browser, tab}) {
 
@@ -48,5 +45,3 @@ class Browser extends EventEmitter {
         return  this._page[0].evaluate('navigator.userAgent');
     }
 }
-
-module.exports = Browser;

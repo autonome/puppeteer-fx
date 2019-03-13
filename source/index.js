@@ -1,39 +1,17 @@
-'use strict';
+import FoxDriver from 'foxdriver';
 
-/**
- * Serializable value
- *
- * @typedef {number|boolean|string|object|array} Serializable
- *
- * @see     {@link
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#Description|Promise}
- */
+import { getNPMConfig } from '@tech_query/node-toolkit';
 
-/**
- * A proxy of the return value in the future
- *
- * @typedef {Promise} Promise
- *
- * @see     {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise|Promise}
- */
+import Browser from './Browser';
 
-/**
- * Event emitter
- *
- * @typedef {EventEmitter} EventEmitter
- *
- * @see {@link https://nodejs.org/dist/latest-v6.x/docs/api/events.html#events_class_eventemitter|Node.JS - Event module}
- */
 
-const foxdriver = require('foxdriver'), Browser = require('./Browser'), stack = [ ];
+const stack = [ ];
 
 
 /**
  * Puppeteer API
- *
- * @class
  */
-class Puppeteer {
+export default  class Puppeteer {
     /**
      * Launch a browser instance with given arguments.
      * The browser will be closed when the parent NodeJS process is closed.
@@ -46,14 +24,14 @@ class Puppeteer {
      * @param {string}  [options.userDataDir = '']      Path to a User Data Directory
      * @param {object}  [options.throttling]            Network Throttling
      *
-     * @return {Promise<Browser>}
+     * @return {Browser}
      */
     static async launch({
         executablePath = '',  headless = true,  userDataDir = '',  throttling = { }
-    }) {
+    } = { }) {
         const launchCfg = {
             url:     'about:blank',
-            bin:     executablePath,
+            bin:     executablePath || getNPMConfig('firefox'),
             args:    [ ]
         };
 
@@ -61,7 +39,7 @@ class Puppeteer {
 
         if ( userDataDir )  launchCfg.args.push('--profile', userDataDir);
 
-        const remote = await foxdriver.launch( launchCfg );
+        const remote = await FoxDriver.launch( launchCfg );
 
         if ( throttling )
             await remote.tab.emulation.setNetworkThrottling(
@@ -92,4 +70,11 @@ for (let event  of  ['uncaughtException', 'unhandledRejection', 'SIGINT', 'exit'
     process.on(event, clear);
 
 
-module.exports = Puppeteer;
+/**
+ * Serializable value
+ *
+ * @typedef {number|boolean|string|object|array} Serializable
+ *
+ * @see     {@link
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#Description|Promise}
+ */

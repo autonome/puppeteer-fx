@@ -60,3 +60,7 @@ typings/
 # Editor & IDE configuration
 .vscode/
 .idea/
+
+# Project built
+dist/
+docs/

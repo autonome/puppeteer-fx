@@ -5,27 +5,22 @@
         "browser": true,
         "mocha": true
     },
+    "parser": "babel-eslint",
     "parserOptions": {
-        "ecmaVersion": 8
+        "ecmaVersion": 9,
+        "sourceType": "module"
     },
     "extends": "eslint:recommended",
     "rules": {
         "indent": [
             "error", 4, {"SwitchCase": 1}
         ],
-        "linebreak-style": [
-            "error", "unix"
-        ],
-        "quotes": [
-            "error", "single"
-        ],
-        "semi": [
-            "error", "always"
-        ],
-        "no-console": [
-            "error", {
-                "allow": ["info", "warn", "error", "time", "timeEnd"]
-            }
-        ]
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "no-cond-assign": "off",
+        "no-console": ["error", {
+            "allow": ["info", "warn", "error", "time", "timeEnd"]
+        }]
     }
 }

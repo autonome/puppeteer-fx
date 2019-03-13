@@ -1,17 +1,14 @@
-'use strict';
+import EventEmitter from 'events';
 
-const EventEmitter = require('events'), Path = require('path');
+import { resolve } from 'path';
 
 
 /**
  * Page provides methods to interact with a single tab in Firefox.
  *
  * One Browser instance might have multiple Page instances.
- *
- * @class
- * @extends EventEmitter
  */
-class Page extends EventEmitter {
+export default  class Page extends EventEmitter {
 
     constructor({tab}) {
 
@@ -191,7 +188,7 @@ class Page extends EventEmitter {
      */
     addStyleTag({path, url, content}) {
 
-        if ( path )  url = Path.resolve( path );
+        if ( path )  url = resolve( path );
 
         return  url ?
             this.evaluate(url => {
@@ -221,7 +218,7 @@ class Page extends EventEmitter {
      */
     addScriptTag({path, url, content}) {
 
-        if ( path )  url = Path.resolve( path );
+        if ( path )  url = resolve( path );
 
         return  this.evaluate((url, content) => {
 
@@ -252,5 +249,3 @@ class Page extends EventEmitter {
         );
     }
 }
-
-module.exports = Page;
