@@ -1,5 +1,3 @@
-import FoxDriver from 'foxdriver';
-
 import { getNPMConfig } from '@tech_query/node-toolkit';
 
 import Browser from './Browser';
@@ -12,6 +10,11 @@ const stack = [ ];
  * Puppeteer API
  */
 export default  class Puppeteer {
+    /**
+     * @return {String} A path where Puppeteer expects to find installed Firefox
+     */
+    static executablePath() {  return getNPMConfig('firefox');  }
+
     /**
      * Launch a browser instance with given arguments.
      * The browser will be closed when the parent NodeJS process is closed.
@@ -27,11 +30,11 @@ export default  class Puppeteer {
      * @return {Browser}
      */
     static async launch({
-        executablePath = '',  headless = true,  userDataDir = '',  throttling = { }
+        executablePath = '',  headless = true,  userDataDir = '',  throttling
     } = { }) {
         const launchCfg = {
             url:     'about:blank',
-            bin:     executablePath || getNPMConfig('firefox'),
+            bin:     executablePath || this.executablePath(),
             args:    [ ]
         };
 
@@ -39,35 +42,32 @@ export default  class Puppeteer {
 
         if ( userDataDir )  launchCfg.args.push('--profile', userDataDir);
 
-        const remote = await FoxDriver.launch( launchCfg );
-
         if ( throttling )
-            await remote.tab.emulation.setNetworkThrottling(
-                throttling.downloadThroughput || 75000,
-                throttling.uploadThroughput || 25000,
-                throttling.latency || 100
-            );
+            throttling.downloadThroughput = throttling.downloadThroughput || 75000,
+            throttling.uploadThroughput = throttling.uploadThroughput || 25000,
+            throttling.latency = throttling.latency || 100;
 
-        return  new Browser( remote );
+        return  stack[stack.push(new Browser(launchCfg, throttling)) - 1];
     }
-}
 
-async function clear(error) {
+    /**
+     * @param {?Error} error
+     */
+    static async exit(error) {
 
-    await Promise.all( stack.map(browser => browser.close()) );
+        await Promise.all( stack.map(browser => browser.close()) );
 
-    if (error instanceof Error) {
+        if (!(error instanceof Error))  process.exit(0);
 
         console.error( error );
 
         process.exit(1);
     }
-
-    process.exit(0);
 }
 
+
 for (let event  of  ['uncaughtException', 'unhandledRejection', 'SIGINT', 'exit'])
-    process.on(event, clear);
+    process.on(event, Puppeteer.exit);
 
 
 /**

@@ -3,20 +3,39 @@ import EventEmitter from 'events';
 import { resolve } from 'path';
 
 
+const _remote_ = Symbol('Page remote');
+
+
 /**
  * Page provides methods to interact with a single tab in Firefox.
  *
  * One Browser instance might have multiple Page instances.
  */
 export default  class Page extends EventEmitter {
-
-    constructor({tab}) {
-
-        super()._tab = tab;
-    }
+    /**
+     * @param {Object} remote
+     */
+    constructor(remote) {  super()[_remote_] = remote;  }
 
     /**
-     * @private
+     * @return {Promise}
+     */
+    close() {  return  this[_remote_].tab.browser.close();  }
+
+    /**
+     * @param {String} [url='about:blank'] URL to navigate page to.
+     *                                     The url should include scheme, e.g. https://.
+     * @return {Promise}
+     */
+    goto(url) {  return  this[_remote_].tab.navigateTo( url );  }
+
+    /**
+     * @return {Promise}
+     */
+    reload() {  return  this[_remote_].tab.reload();  }
+
+    /**
+     * @protected
      *
      * @see {@link http://searchfox.org/mozilla-central/source/devtools/shared/client/object-client.js}
      *
@@ -26,41 +45,19 @@ export default  class Page extends EventEmitter {
      */
     static inflateGrip(grip) {
 
-        var inflated;
-
         switch ( grip.type ) {
             case 'undefined':
                 break;
             case 'object': {
 
-                inflated = { };
+                const { ownProperties } = grip.preview,  inflated = { };
 
-                for (let key  of  Object.keys( grip.preview.ownProperties ))
-                    inflated[ key ] = grip.preview.ownProperties[ key ].value;
+                for (let key in ownProperties)
+                    inflated[ key ] = ownProperties[ key ].value;
 
-                break;
+                return inflated;
             }
         }
-
-        return inflated;
-    }
-
-    /**
-     * @param {string} [url='about:blank'] URL to navigate page to.
-     *                                     The url should include scheme, e.g. https://.
-     * @return {Promise}
-     */
-    goto(url) {
-
-        return  this._tab.navigateTo( url );
-    }
-
-    /**
-     * @return {Promise}
-     */
-    reload() {
-
-        return  this._tab.reload();
     }
 
     /**
@@ -72,33 +69,24 @@ export default  class Page extends EventEmitter {
     async evaluate(expression, ...parameter) {
 
         return Page.inflateGrip(
-            await this._tab.console.evaluateJS(expression, ...parameter)
+            await this[_remote_].tab.console.evaluateJS(expression, ...parameter)
         );
     }
 
     /**
      * @return {Promise<string>}
      */
-    title() {
-
-        return this.evaluate('document.title');
-    }
+    title() {  return this.evaluate('document.title');  }
 
     /**
      * @return {Promise}
      */
-    goBack() {
-
-        return  this.evaluate('history.back()');
-    }
+    goBack() {  return this.evaluate('history.back()');  }
 
     /**
      * @return {Promise}
      */
-    goFoward() {
-
-        return  this.evaluate('history.forward()');
-    }
+    goFoward() {  return this.evaluate('history.forward()');  }
 
     /**
      * Gets the full HTML contents of the page, including the doctype.
@@ -200,7 +188,7 @@ export default  class Page extends EventEmitter {
                 return  document.head.appendChild( CSS ).sheet;
 
             },  url)  :
-            this._tab.styleSheets.addStyleSheet( content );
+            this[_remote_].tab.styleSheets.addStyleSheet( content );
     }
 
     /**

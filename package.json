@@ -1,6 +1,6 @@
 {
   "name": "puppeteer-fx",
-  "version": "0.0.6",
+  "version": "0.3.0",
   "description": "Completely partial implementation of the Puppeteer API for Firefox",
   "keywords": [
     "automation",
