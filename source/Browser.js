@@ -5,8 +5,9 @@ import FoxDriver from 'foxdriver';
 import Page from './Page';
 
 
-const _option_ = Symbol('Browser option'), page_browser = new Map();
-
+const _throttler_ = Symbol('Browser throttler'),
+    _remote_ = Symbol('Browser remote'),
+    tab_page = { };
 
 /**
  * A Browser is created when Puppeteer connects to a Firefox instance
@@ -18,27 +19,34 @@ export default  class Browser extends EventEmitter {
      */
     constructor(launcher, throttler) {
 
-        super()[_option_] = {launcher, throttler};
+        super()[_throttler_] = throttler;
+
+        this[_remote_] = FoxDriver.launch( launcher ).then(
+            ({ browser })  =>  browser
+        );
     }
 
     /**
+     * @private
+     *
+     * @param {Tab} tab
+     *
      * @return {Page}
      */
-    async newPage() {
+    async addPage(tab) {
 
-        var remote = await FoxDriver.launch( this[_option_].launcher ),
-            {downloadThroughput, uploadThroughput, latency} =
-                this[_option_].throttler || { };
+        const page = new Page(this, tab);
 
-        await remote.tab.emulation.setNetworkThrottling(
+        tab_page[tab.name] = page;
+
+        const {downloadThroughput, uploadThroughput, latency} =
+            this[_throttler_] || { };
+
+        await tab.emulation.setNetworkThrottling(
             downloadThroughput, uploadThroughput, latency
         );
 
-        remote = new Page( remote );
-
-        page_browser.set(remote, this);
-
-        return remote;
+        return page;
     }
 
     /**
@@ -46,9 +54,20 @@ export default  class Browser extends EventEmitter {
      */
     async pages() {
 
-        return Array.from(
-            page_browser,  ([page, browser]) => (browser === this) && page
-        ).filter( Boolean );
+        return  await Promise.all(
+            (await (await this[_remote_]).listTabs())
+                .map(tab  =>  tab_page[tab.name] || this.addPage( tab ))
+        );
+    }
+
+    /**
+     * @return {Page}
+     */
+    async newPage() {
+
+        await  (await this.pages())[0].evaluate('self.open("about:blank")');
+
+        return  (await this.pages()).slice(-1)[0];
     }
 
     /**

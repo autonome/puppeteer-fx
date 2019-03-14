@@ -5,19 +5,31 @@ import WebServer from 'koapache';
 
 var env;
 
+function bootBrowser() {
 
-export  async function getEnv() {
+    return Puppeteer.launch({
+        headless:  !process.env.npm_lifecycle_script.includes('--inspect')
+    });
+}
 
-    if ( env )  return env;
+/**
+ * @return   {Object}
+ * @property {String}  server
+ * @property {Browser} browser
+ */
+export  async function prepare() {
 
-    var host = await (new WebServer('docs/')).workerHost();
+    if ( env ) {
 
-    host = `http://${host.address}:${host.port}/`;
+        if (! (await env.browser.pages())[0])
+            env.browser = await bootBrowser();
 
-    return  env = {
-        host,
-        page:  await (await Puppeteer.launch({
-            headless:  !process.env.npm_lifecycle_script.includes('--inspect')
-        })).newPage()
-    };
+        return env;
+    }
+
+    var server = await (new WebServer('docs/')).workerHost();
+
+    server = `http://${server.address}:${server.port}/`;
+
+    return  env = {server,  browser: await bootBrowser()};
 }

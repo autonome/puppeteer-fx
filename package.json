@@ -31,9 +31,10 @@
     "node": "^6.3.0"
   },
   "scripts": {
-    "install": "app-find firefox -c",
+    "install": "app-find firefox -c  &&  node source/install",
     "lint": "eslint source/ test/ --fix",
-    "build": "npm run lint  &&  babel source/ -d dist/ -s  &&  esdoc",
+    "compile": "babel source/ -d dist/ -s --ignore source/install.js",
+    "build": "npm run lint  &&  npm run compile  &&  esdoc",
     "test": "npm run build  &&  mocha --exit",
     "debug": "esdoc  &&  mocha --inspect --no-timeouts",
     "start": "esdoc  &&  web-server docs/ -o"

@@ -3,7 +3,7 @@ import EventEmitter from 'events';
 import { resolve } from 'path';
 
 
-const _remote_ = Symbol('Page remote');
+const _tab_ = Symbol('Page tab'), page_browser = new WeakMap();
 
 
 /**
@@ -13,26 +13,32 @@ const _remote_ = Symbol('Page remote');
  */
 export default  class Page extends EventEmitter {
     /**
-     * @param {Object} remote
+     * @param {Browser} browser
+     * @param {Tab}     tab
      */
-    constructor(remote) {  super()[_remote_] = remote;  }
+    constructor(browser, tab) {
+
+        page_browser.set(super(), browser);
+
+        this[_tab_] = tab;
+    }
 
     /**
-     * @return {Promise}
+     * @return {Browser}
      */
-    close() {  return  this[_remote_].tab.browser.close();  }
+    browser() {  return page_browser.get( this );  }
 
     /**
      * @param {String} [url='about:blank'] URL to navigate page to.
      *                                     The url should include scheme, e.g. https://.
      * @return {Promise}
      */
-    goto(url) {  return  this[_remote_].tab.navigateTo( url );  }
+    goto(url) {  return  this[_tab_].navigateTo( url );  }
 
     /**
      * @return {Promise}
      */
-    reload() {  return  this[_remote_].tab.reload();  }
+    reload() {  return  this[_tab_].reload();  }
 
     /**
      * @protected
@@ -69,9 +75,14 @@ export default  class Page extends EventEmitter {
     async evaluate(expression, ...parameter) {
 
         return Page.inflateGrip(
-            await this[_remote_].tab.console.evaluateJS(expression, ...parameter)
+            await this[_tab_].console.evaluateJS(expression, ...parameter)
         );
     }
+
+    /**
+     * @return {Promise}
+     */
+    close() {  return  this.evaluate('self.close()');  }
 
     /**
      * @return {Promise<string>}
@@ -188,7 +199,7 @@ export default  class Page extends EventEmitter {
                 return  document.head.appendChild( CSS ).sheet;
 
             },  url)  :
-            this[_remote_].tab.styleSheets.addStyleSheet( content );
+            this[_tab_].styleSheets.addStyleSheet( content );
     }
 
     /**
