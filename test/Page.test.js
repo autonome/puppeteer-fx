@@ -4,20 +4,22 @@ import { prepare } from './utility';
 var server, browser, page;
 
 
-describe('Browser',  () => {
+describe('Page',  () => {
 
     before(async () => {
 
         ({server, browser} = await prepare());
 
-        page = await browser.newPage();
+        page = (await browser.pages())[1];
     });
 
     /**
-     * @test {Page#goto}
+     * @test {Page#waitForNavigation}
      */
     it('Load a page',  async () => {
 
         await page.goto( server );
+
+        console.info(await page.title());
     });
 });

@@ -17,16 +17,6 @@ describe('Browser',  () => {
 
         page.browser().should.be.equal( browser );
 
-        (await browser.pages())[0].should.be.equal( page );
-    });
-
-    /**
-     * @test {Browser#close}
-     */
-    it('Close a browser',  async () => {
-
-        await browser.close();
-
-        (await browser.pages()).should.be.empty();
+        (await browser.pages())[1].should.be.equal( page );
     });
 });

@@ -1,0 +1,13 @@
+{
+    "dom.disable_open_during_load": false,
+    "dom.allow_scripts_to_close_windows": true,
+    "browser.rights.override": true,
+    "browser.sessionstore.enabled": false,
+    "browser.sessionstore.resume_from_crash": false,
+    "browser.shell.checkDefaultBrowser": false,
+    "browser.startup.homepage_override.mstone": "ignore",
+    "app.update.auto": false,
+    "app.update.enabled": false,
+    "app.update.service.enabled": false,
+    "toolkit.telemetry.prompted": true
+}

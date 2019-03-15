@@ -21,6 +21,8 @@ export default  class Browser extends EventEmitter {
 
         super()[_throttler_] = throttler;
 
+        this.open = true;
+
         this[_remote_] = FoxDriver.launch( launcher ).then(
             ({ browser })  =>  browser
         );
@@ -77,7 +79,9 @@ export default  class Browser extends EventEmitter {
      */
     async close() {
 
-        await Promise.all( (await this.pages()).map(page => page.close()) );
+        await (await this[_remote_]).close();
+
+        this.open = false;
     }
 
     /**

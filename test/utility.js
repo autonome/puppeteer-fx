@@ -21,8 +21,7 @@ export  async function prepare() {
 
     if ( env ) {
 
-        if (! (await env.browser.pages())[0])
-            env.browser = await bootBrowser();
+        if (! env.browser.open)  env.browser = await bootBrowser();
 
         return env;
     }

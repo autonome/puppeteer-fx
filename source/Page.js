@@ -29,18 +29,6 @@ export default  class Page extends EventEmitter {
     browser() {  return page_browser.get( this );  }
 
     /**
-     * @param {String} [url='about:blank'] URL to navigate page to.
-     *                                     The url should include scheme, e.g. https://.
-     * @return {Promise}
-     */
-    goto(url) {  return  this[_tab_].navigateTo( url );  }
-
-    /**
-     * @return {Promise}
-     */
-    reload() {  return  this[_tab_].reload();  }
-
-    /**
      * @protected
      *
      * @see {@link http://searchfox.org/mozilla-central/source/devtools/shared/client/object-client.js}
@@ -79,25 +67,58 @@ export default  class Page extends EventEmitter {
         );
     }
 
+    async close() {  this.evaluate('self.close()');  }
+
     /**
+     * @param {?Object} options
+     *
      * @return {Promise}
      */
-    close() {  return  this.evaluate('self.close()');  }
+    waitForNavigation({waitUntil = 'load'} = { }) {
+
+        return  this.evaluate(event => new Promise(resolve => {
+
+            self.addEventListener(event, resolve);
+
+        }), waitUntil);
+    }
+
+    /**
+     * @param {String} [url='about:blank'] URL to navigate page to.
+     *                                     The url should include scheme, e.g. https://.
+     */
+    async goto(url) {
+
+        await this[_tab_].navigateTo( url );
+
+        await this.waitForNavigation();
+    }
+
+    async reload() {
+
+        await this[_tab_].reload();
+
+        await this.waitForNavigation();
+    }
+
+    async goBack() {
+
+        await this.evaluate('history.back()');
+
+        await this.waitForNavigation();
+    }
+
+    async goFoward() {
+
+        await this.evaluate('history.forward()');
+
+        await this.waitForNavigation();
+    }
 
     /**
      * @return {Promise<string>}
      */
-    title() {  return this.evaluate('document.title');  }
-
-    /**
-     * @return {Promise}
-     */
-    goBack() {  return this.evaluate('history.back()');  }
-
-    /**
-     * @return {Promise}
-     */
-    goFoward() {  return this.evaluate('history.forward()');  }
+    title() {  return this.evaluate(() => document.title);  }
 
     /**
      * Gets the full HTML contents of the page, including the doctype.
@@ -106,20 +127,9 @@ export default  class Page extends EventEmitter {
      */
     content() {
 
-        return  this.evaluate(() => {
-
-            const DocType = document.doctype;
-
-            var type = `<!DocType ${(DocType.name + '').toUpperCase()}`;
-
-            if ( DocType.publicId.valueOf() )
-                type += ` Public "${DocType.publicId}"`;
-
-            if ( DocType.systemId.valueOf() )
-                type += ` "${DocType.systemId}"`;
-
-            return `${type}>${document.documentElement.outerHTML}`;
-        });
+        return this.evaluate(
+            ()  =>  ((new XMLSerializer()).serializeToString( document ))
+        );
     }
 
     /**
@@ -152,7 +162,7 @@ export default  class Page extends EventEmitter {
     $(selector) {
 
         return this.evaluate(
-            `document.querySelector(${ JSON.stringify( selector ) })`
+            selector => document.querySelector( selector ),  selector
         );
     }
 
@@ -167,7 +177,7 @@ export default  class Page extends EventEmitter {
     $$(selector) {
 
         return this.evaluate(
-            `document.querySelectorAll(${ JSON.stringify( selector ) })`
+            selector => document.querySelectorAll( selector ),  selector
         );
     }
 
@@ -244,7 +254,21 @@ export default  class Page extends EventEmitter {
     focus(selector) {
 
         return this.evaluate(
-            `document.querySelector(${ JSON.stringify( selector ) }).focus()`
+            selector => document.querySelector( selector ).focus(),  selector
+        );
+    }
+
+    /**
+     * @param {String} selector - A selector to search for element to click.
+     *                            If there are multiple elements satisfying the selector,
+     *                            the first will be clicked.
+     * @return {Promise} Promise which resolves when the element matching selector is successfully clicked.
+     *                   The Promise will be rejected if there is no element matching selector.
+     */
+    click(selector) {
+
+        return this.evaluate(
+            selector => document.querySelector( selector ).click(),  selector
         );
     }
 }

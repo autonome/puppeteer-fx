@@ -59,26 +59,9 @@ const puppeteer = require('./puppeteer-fx');
 
 ## Profiles
 
-user.js
+ - Base: https://github.com/saucelabs/foxdriver/blob/master/lib/config/profile/prefs.js
 
-```JavaScript
-user_pref("devtools.chrome.enabled", true);
-user_pref("devtools.debugger.prompt-connection", false);
-user_pref("devtools.debugger.remote-enabled", true);
-user_pref("toolkit.telemetry.reportingpolicy.firstRun", false);
-user_pref("browser.sessionstore.enabled", false);
-user_pref("browser.sessionstore.resume_from_crash", false);
-user_pref("browser.shell.checkDefaultBrowser", false);
-user_pref("app.update.auto", false);
-user_pref("app.update.enabled", false);
-user_pref("app.update.service.enabled", false);
-user_pref("toolkit.telemetry.prompted", true);
-user_pref("browser.rights.override", true);
-user_pref("browser.startup.homepage_override.mstone", "ignore");
-user_pref("browser.shell.checkDefaultBrowser", false);
-```
-
-https://github.com/saucelabs/foxdriver/blob/master/lib/config/profile/prefs.js
+ - More: https://github.com/autonome/puppeteer-fx/blob/master/source/install/user_prefs.json
 
 
 
